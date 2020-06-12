@@ -1,3 +1,6 @@
+# stochastic exclusive gene choice
+This set of software is to accompany the article (publication pending), please refer to it for more details on the project itself.
+
 - [1. Requirements/Dependencies](#1-requirementsdependencies)
 - [2. Introduction](#2-introduction)
 - [3. Important notes](#3-important-notes)
