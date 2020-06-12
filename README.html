@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>1. Requirements/Dependencies</title>
+        <style>
+</style>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+        <link href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css" rel="stylesheet" type="text/css">
+        <style>
+.task-list-item { list-style-type: none; } .task-list-item-checkbox { margin-left: -20px; vertical-align: middle; }
+</style>
+        <style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        
+        <script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script>
+        
+    </head>
+    <body class="vscode-light">
+        <ul>
+<li><a href="#1-requirementsdependencies">1. Requirements/Dependencies</a></li>
+<li><a href="#2-introduction">2. Introduction</a></li>
+<li><a href="#3-important-notes">3. Important notes</a>
+<ul>
+<li><a href="#31-nextflow-caching-and-storage-capacity">3.1. Nextflow caching and storage capacity</a></li>
+<li><a href="#32-results-directory-structure">3.2. Results directory structure</a></li>
+</ul>
+</li>
+<li><a href="#4-software-description">4. Software description</a>
+<ul>
+<li><a href="#41-data-preparation">4.1. Data Preparation</a>
+<ul>
+<li><a href="#411-prepare-family-set-panther-preprocess_pantherpy">4.1.1. Prepare family set (PANTHER): <strong>preprocess_panther.py</strong></a></li>
+<li><a href="#412-prepare-tpm-datasets-clean_datasetipynb">4.1.2. Prepare TPM datasets: <strong>clean_dataset.ipynb</strong></a></li>
+</ul>
+</li>
+<li><a href="#42-chromosome-wise-pipelines">4.2. Chromosome-wise pipelines</a>
+<ul>
+<li><a href="#421-filter-chromosomes-binsplit_chromosomespy">4.2.1. Filter chromosomes: <strong>bin/split_chromosomes.py</strong></a></li>
+<li><a href="#422-calculate-thresholds-and-dichotomise-bindichotomisepy">4.2.2. Calculate thresholds and dichotomise: <strong>bin/dichotomise.py</strong></a></li>
+<li><a href="#423-filter-genes-binfilter_genespy">4.2.3. Filter genes: <strong>bin/filter_genes.py</strong></a></li>
+<li><a href="#424-calculate-ic-bincalculate_icpy">4.2.4. Calculate IC: <strong>bin/calculate_IC.py</strong></a></li>
+<li><a href="#425-calculate-ic-for-shuffled-chromosomes-bincalculate_chromosomes_shuffled_icpy">4.2.5. Calculate IC for shuffled chromosomes: <strong>bin/calculate_chromosomes_shuffled_IC.py</strong></a></li>
+<li><a href="#426-collect-shuffled-ic-bincollect_chromosomes_shuffled_icpy">4.2.6. Collect shuffled IC: <strong>bin/collect_chromosomes_shuffled_IC.py</strong></a></li>
+</ul>
+</li>
+<li><a href="#43-family-wise-pipeline">4.3. Family-wise pipeline</a>
+<ul>
+<li><a href="#431-transform-family-set-bintransform_familysetpy">4.3.1. Transform family set: <strong>bin/transform_familyset.py</strong></a></li>
+<li><a href="#432-dichotomise-bindichotomise_familiespy">4.3.2. Dichotomise: <strong>bin/dichotomise_families.py</strong></a></li>
+<li><a href="#433-calculate-ic-bincalculate_family_icpy">4.3.3. Calculate IC: <strong>bin/calculate_family_IC.py</strong></a></li>
+<li><a href="#434-permute-families-binpermute_familiespy">4.3.4. Permute families: <strong>bin/permute_families.py</strong></a></li>
+<li><a href="#435-calculate-shuffled-ic-bincalculate_family_icpy">4.3.5. Calculate shuffled IC: <strong>bin/calculate_family_IC.py</strong></a></li>
+<li><a href="#436-collect-shuffled-ic-bincollect_shuffled_icpy">4.3.6. Collect Shuffled IC: <strong>bin/collect_shuffled_IC.py</strong></a></li>
+</ul>
+</li>
+<li><a href="#44-chromosome-wise-analysis">4.4. Chromosome-wise analysis</a>
+<ul>
+<li><a href="#441-statistical-tests-permutation_testipynb">4.4.1. Statistical tests: <strong>permutation_test.ipynb</strong></a></li>
+<li><a href="#442-plot-statistical-tests-plot_chr_stat_testsipynb">4.4.2. Plot statistical tests: <strong>plot_chr_stat_tests.ipynb</strong></a></li>
+<li><a href="#443-plot-thresholdsdichotomisation-plot_thresholdsipynb">4.4.3. Plot thresholds/dichotomisation: <strong>plot_thresholds.ipynb</strong></a></li>
+<li><a href="#444-overlap-of-tails-of-chromosomal-stretches-chromosome_overlap_analysisipynb">4.4.4. Overlap of tails of chromosomal stretches: <strong>chromosome_overlap_analysis.ipynb</strong></a></li>
+</ul>
+</li>
+<li><a href="#45-family-wise-analysis">4.5. Family-wise analysis</a>
+<ul>
+<li><a href="#451-statistical-tests-family_wise_analysisipynb">4.5.1. Statistical tests: <strong>family_wise_analysis.ipynb</strong></a></li>
+<li><a href="#452-overlap-of-tails-of-families-family_overlap_analysisipynb">4.5.2. Overlap of tails of families: <strong>family_overlap_analysis.ipynb</strong></a></li>
+<li><a href="#453-plot-statistical-tests-plot_family_stat_testsipynb">4.5.3. Plot statistical tests: <strong>plot_family_stat_tests.ipynb</strong></a></li>
+<li><a href="#454-plot-chosen-families-plot_family_overlap_heatmapipynb">4.5.4. Plot chosen families: <strong>plot_family_overlap_heatmap.ipynb</strong></a></li>
+</ul>
+</li>
+<li><a href="#46-both-chromosome--and-family-wise-analysis">4.6. Both chromosome- and family-wise analysis</a>
+<ul>
+<li><a href="#461-cell-type-overlaps-dataset_overlapsipynb">4.6.1. Cell type overlaps: <strong>dataset_overlaps.ipynb</strong></a></li>
+</ul>
+</li>
+<li><a href="#47-misc">4.7. Misc</a>
+<ul>
+<li><a href="#471-transform-fitted-distributions-data-from-mathematica-fitted_distributionsipynb">4.7.1. Transform Fitted Distributions data (from Mathematica): <strong>fitted_distributions.ipynb</strong></a></li>
+<li><a href="#472-dichotomisation-correlation-dichotomisation_correlationipynb">4.7.2. Dichotomisation Correlation: <strong>dichotomisation_correlation.ipynb</strong></a></li>
+<li><a href="#473-thresholds-for-umi-no-bimodality-alveolar_exploratoryipynb">4.7.3. Thresholds for UMI (no bimodality): <strong>alveolar_exploratory.ipynb</strong></a></li>
+<li><a href="#474-distribution-fitting-mathematica_codedichotomisationnb">4.7.4. Distribution fitting: <strong>mathematica_code/Dichotomisation.nb</strong></a></li>
+<li><a href="#475-permutation-test-mathematics_codepermutation_testnb">4.7.5. Permutation test: <strong>mathematics_code/permutation_test.nb</strong></a></li>
+</ul>
+</li>
+<li><a href="#48-utility-functions">4.8. Utility functions</a>
+<ul>
+<li><a href="#481-binpipeline_utilsgff_utilspy">4.8.1. bin/pipeline_utils/gff_utils.py</a></li>
+<li><a href="#482-binpipeline_utilsic_utilspy">4.8.2. bin/pipeline_utils/ic_utils.py</a></li>
+<li><a href="#483-binpipeline_utilsnextflow_utilspy">4.8.3. bin/pipeline_utils/nextflow_utils.py</a></li>
+<li><a href="#484-binpipeline_utilspomegranate_parserpy">4.8.4. bin/pipeline_utils/pomegranate_parser.py</a></li>
+<li><a href="#485-binpipeline_utilsvrs_utilspy">4.8.5. bin/pipeline_utils/vrs_utils.py</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="1-requirementsdependencies">1. Requirements/Dependencies</h1>
+<ul>
+<li>Standard Anaconda installation (pandas &lt; 1.0, numpy, Jupyter notebooks, etc).</li>
+<li>tqdm -- for progress bars</li>
+<li>swifter -- for parallelisation (speeds the dichotomisation up drastically)</li>
+<li>pomegranate -- library for probability distributions</li>
+<li>Nextflow -- for pipelines <a href="https://www.nextflow.io/">(link)</a></li>
+</ul>
+<p>The conda environment file (<strong>stochastic_env.yml</strong>) is provided, and it is encouraged to use it, so no library version mismatch happen.</p>
+<h1 id="2-introduction">2. Introduction</h1>
+<p>Different parts of the project were implemented as either standalone python scripts, scripts as the part of the nextflow pipelines, Mathematica notebooks, or Jupyter notebooks (mostly for the later stages of the project)</p>
+<p>Note: even though the pipeline scripts can be run manually, I highly suggest running them via nextflow (this allows running the whole pipeline from input to the final results without interruption and any intervention from the user)</p>
+<p>The following documentation describes all the components in the roughly logical order (more or less in the order parts of the project are to be executed).</p>
+<p>For the details on the methods and the project itself see the article <a href="">pending</a></p>
+<h1 id="3-important-notes">3. Important notes</h1>
+<h2 id="31-nextflow-caching-and-storage-capacity">3.1. Nextflow caching and storage capacity</h2>
+<p>Nextflow creates a lot of temporary files! Even though this is sometimes useful (e.g. when you change a small part of the pipeline, and run the pipeline again with -resume option, it will rerun only the parts that have been affected), it is advised to keep an eye on the directory (<code>work/</code>) and clean it from time to time.</p>
+<h2 id="32-results-directory-structure">3.2. Results directory structure</h2>
+<p>For each dataset processed with this pipelines (and subsequent notebooks) the results directory structure is as follows:</p>
+<ul>
+<li>$dataset
+<ul>
+<li>clean_panther4march -- family-wise results
+<ul>
+<li>intermediate
+<ul>
+<li>dichotomised_genes.csv</li>
+<li>family_thresholds.csv</li>
+<li>familyset.csv -- filtered familyset for this specific dataset</li>
+</ul>
+</li>
+<li>results
+<ul>
+<li>family_IC.csv</li>
+<li>shuffled_family_IC.csv</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>intermediate
+<ul>
+<li>$dichotomisation_type
+<ul>
+<li>dichotomised_genes.csv</li>
+<li>filtered_dichotomised_genes.csv</li>
+<li>optimal_thresholds.csv</li>
+</ul>
+</li>
+<li>chr*_filtered.csv</li>
+</ul>
+</li>
+<li>results
+<ul>
+<li>$dichotomisation_type
+<ul>
+<li>shuffled_IC.csv</li>
+<li>stage1_chr*_IC.csv</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>mathematica -- optional, results were put there manually
+<ul>
+<li>mathematica_results.csv -- the data obtained from Mathematica</li>
+<li>fitted_distributions_dichotomised.csv</li>
+<li>fitted_distributions_thresholds.csv</li>
+</ul>
+</li>
+<li>chr_ks.csv -- Kolmogorov-Smirnov test, chromosome-wise</li>
+<li>chr_stat_test_pvalues*.csv -- permutation tests, chromosome-wise</li>
+<li>family_stat_test_pvalues.csv -- statistical tests, family-wise</li>
+</ul>
+</li>
+</ul>
+<h1 id="4-software-description">4. Software description</h1>
+<h2 id="41-data-preparation">4.1. Data Preparation</h2>
+<h3 id="411-prepare-family-set-panther-preprocess_pantherpy">4.1.1. Prepare family set (PANTHER): <strong>preprocess_panther.py</strong></h3>
+<p>Input: raw PANTHER families file (i.e. PTHR15.0_mouse.tsv)</p>
+<p>Output:</p>
+<ul>
+<li>Intermediate -- preprocessed_panther.csv (various extracted gene ids to be converted into gene symbols)</li>
+<li>Final -- clean_panther.csv (final table)</li>
+</ul>
+<p>Description:
+Extracts MGI, Ensembl, Uniprot and Entrez IDs. Which are then to be manually converted into gene symbols (e.g. with db2db) and to be again fed into the script. It, then, merges the family IDs with gene symbols. The log of the cleaning that I have performed is below:</p>
+<ul>
+<li>Accessed via <a href="ftp://ftp.pantherdb.org/sequence_classifications/current_release/PANTHER_Sequence_Classification_files/PTHR15.0_mouse">ftp://ftp.pantherdb.org/sequence_classifications/current_release/PANTHER_Sequence_Classification_files/PTHR15.0_mouse</a></li>
+<li>21393 genes total</li>
+<li>Gene IDs are extracted with regex (Gene Symbols, MGI, Uniprot names, Ensembl IDs and EntrezGene ID)
+<ul>
+<li>MGI -- 21175 genes</li>
+<li>Uniprot -- 140 genes</li>
+<li>Ensembl -- 51 genes</li>
+<li>Gene Symbols -- 26 genes</li>
+<li>EntrezGene -- 1 gene</li>
+</ul>
+</li>
+<li>Family IDs are extracted (by splitting subfamily ids)</li>
+<li>The IDs are converted into gene symbols where possible
+<ul>
+<li>For MGI -- <a href="http://www.informatics.jax.org/batch">http://www.informatics.jax.org/batch</a></li>
+<li>For the rest -- <a href="https://biodbnet-abcc.ncifcrf.gov/db/db2db.php">https://biodbnet-abcc.ncifcrf.gov/db/db2db.php</a></li>
+</ul>
+</li>
+<li>Genes with no symbol are removed (172 genes)</li>
+<li>One duplicated gene is renamed (to be aligned with PANTHER) -- MGI:2442135: Arhgef18 -&gt; A430078G23Rik</li>
+<li>One duplicated gene had two distinct families associated:
+Ighd (MGI:96447) -- PTHR23266 and PTHR23411. The first one is chosen, as most of the genes with this prefix are in there</li>
+<li>The rest of the duplicates (11 genes) come from the different accession ids (eg. MGI and Ensembl) and had no discrepancy in family IDs</li>
+<li>The total number of genes left -- 21209</li>
+</ul>
+<p>Note: clean_panther.csv is provided in this repository</p>
+<h3 id="412-prepare-tpm-datasets-clean_datasetipynb">4.1.2. Prepare TPM datasets: <strong>clean_dataset.ipynb</strong></h3>
+<p>Input:</p>
+<ul>
+<li>ensembl_id_to_gene_symbol_biomart_export.tsv (from Ensembl biomart)</li>
+<li><em>.tsv/</em>.csv (TPM dataset to be cleaned)</li>
+</ul>
+<p>Output: *.csv (cleaned TPM dataset)</p>
+<p>Description:
+Many datasets that we used had duplicated genes (e.g. Dopaminergic). Therefore the duplicates need to be disabiguated. The process applied:</p>
+<ul>
+<li>Map Ensembl IDs in the raw dataset to the gene symbols from the latest reference (this already fixes the vast majority of the duplicates)</li>
+<li>In case there are still some duplicates (i.e. Ensembl IDs themselves are duplicated), there is no way to differentiate between them (the rows probably come from different transcripts), therefore the rows with the largest expression are kept</li>
+</ul>
+<h2 id="42-chromosome-wise-pipelines">4.2. Chromosome-wise pipelines</h2>
+<p>Chromosome-wise pipeline is run by <strong>full_dataset_IC.nf</strong> and <strong>full_dataset_IC_no_BI.nf</strong> (with and without Bimodality Index filtering for TPM and UMI respectively). The final results of the pipeline: dichotomised genes, optimal thresholds for each gene, and IC calculations (both for the original distribution and for the shuffled chromosomes).
+Input parameters:</p>
+<ul>
+<li>--gff -- path to the GFF reference file</li>
+<li>--dataset -- path to the <em>cleaned</em> TPM/UMI dataset file</li>
+<li>--type -- dichotomisation type (<em>vrs</em>, <em>geomean</em> or <em>3max</em>)</li>
+<li>--shuffle_N -- integer, number of shufflings performed for the permutation test</li>
+</ul>
+<p>Examples:</p>
+<pre><code><code><div>time ./full_dataset_IC.nf --dataset `realpath Dopaminergic_TPM_clean.csv` --gff `realpath GRCm38.p6_genomic.gff` --type geomean --shuffle_N 1000 -resume;
+
+time ./full_dataset_IC_no_BI.nf --dataset `realpath Alveolar_cells_Type_I_Merged_Batches.csv` --gff `realpath GRCm38.p6_genomic.gff` --type 3max --shuffle_N 1000 -resume;
+
+</div></code></code></pre>
+<p>Note: for the ease of use, all the pipelines are run with <strong>run_workflow.sh</strong> script, you can refer to it for more examples of commands to run</p>
+<p>Note: all scripts that are run with pipelines are in <strong>bin/</strong> directory</p>
+<p>Note: for all pipelines, the results are saved under the directory corresponding to the name of the dataset file provided.</p>
+<h3 id="421-filter-chromosomes-binsplit_chromosomespy">4.2.1. Filter chromosomes: <strong>bin/split_chromosomes.py</strong></h3>
+<p>Input: GFF file</p>
+<p>Output: $dataset_name/intermediate/chr*_filtered.csv -- CSV for each filtered chromosome separately</p>
+<p>Description:
+The script reads the GFF file, splits it into chromosomes, extracts genes, filters them (remove predicted genes, and keep genes with the source BestRefSeq), and outputs results as a series of CSV files.</p>
+<h3 id="422-calculate-thresholds-and-dichotomise-bindichotomisepy">4.2.2. Calculate thresholds and dichotomise: <strong>bin/dichotomise.py</strong></h3>
+<p>Input:</p>
+<ul>
+<li>dataset -- cleaned dataset filename</li>
+<li>type -- dichotomisation type (<em>vrs</em>, <em>geomean</em> or <em>3max</em>)</li>
+</ul>
+<p>Output:</p>
+<ul>
+<li>$dataset_name/intermediate/$type/optimal_thresholds.csv -- optimal threshold found for each gene with the respective dichotomisation method</li>
+<li>$dataset_name/intermediate/$type/dichotomised_genes.csv -- table of dichotomised genes</li>
+</ul>
+<p>Description:</p>
+<p>Calculates <em>individual</em> thresholds for each gene. For dichotomisation methods see Methods section in the article, or the corresponding code.</p>
+<h3 id="423-filter-genes-binfilter_genespy">4.2.3. Filter genes: <strong>bin/filter_genes.py</strong></h3>
+<p>Input:</p>
+<ul>
+<li>dataset -- the set of raw and cleaned genes/expression values</li>
+<li>dichotomised_genes -- the set of dichotomised genes from the previous step</li>
+<li>type -- dichotomisation type</li>
+</ul>
+<p>Output: $dataset_name/intermediate/$type/filtered_dichotomised_genes.csv -- filtered table of dichotomised genes</p>
+<p>Description:
+Performes BI filtering (for TPM datasets). Other types of filtering can potentially be added.</p>
+<h3 id="424-calculate-ic-bincalculate_icpy">4.2.4. Calculate IC: <strong>bin/calculate_IC.py</strong></h3>
+<p>Input:</p>
+<ul>
+<li>(chr_name, chromosome) -- a tuple of a chromosome name and the filtered chromosome table</li>
+<li>dichotomised_genes</li>
+<li>type -- dichotomisation type</li>
+</ul>
+<p>Output:</p>
+<ul>
+<li>(chr_name, $dataset_name/results/$type/stage1_chr*_IC.csv) -- the resulting IC calculations (for each chromosome separately)</li>
+</ul>
+<p>Description:
+The process is run for each chromosome separately (potentially in parallel). The calculations are performed for all overlapping stretches along the chromosome. Stretch sizes 7, 14 and 21.
+The output rows record the start and end position in the chromosome (gene number, starting from 0, end -- non-inclusive), stretch size, number of genes in a stretch, observed and PB variances, IC, and mean number of expressed genes per cel.</p>
+<h3 id="425-calculate-ic-for-shuffled-chromosomes-bincalculate_chromosomes_shuffled_icpy">4.2.5. Calculate IC for shuffled chromosomes: <strong>bin/calculate_chromosomes_shuffled_IC.py</strong></h3>
+<p>Input:</p>
+<ul>
+<li>dichotomised_genes</li>
+<li>chromosomes -- all chromosome files</li>
+<li>shuffle_N</li>
+</ul>
+<p>Output: shuffled_IC.csv (in temporary directory)</p>
+<p>Description:
+Performes the same calculations as <strong>calculate_IC.py</strong>, but shuffles the order of the genes in chromosomes before that. The process is run shuffle_N times.</p>
+<h3 id="426-collect-shuffled-ic-bincollect_chromosomes_shuffled_icpy">4.2.6. Collect shuffled IC: <strong>bin/collect_chromosomes_shuffled_IC.py</strong></h3>
+<p>Input:</p>
+<ul>
+<li>all shuffled IC files</li>
+<li>type -- dichotomisation type</li>
+</ul>
+<p>Output: $dataset_name/results/$type/shuffled_IC.csv -- combined shuffled ICs</p>
+<p>Description:
+When all the shuffled calculations are finished, the temporary files are combined together (adding the column to indicate iterations).</p>
+<h2 id="43-family-wise-pipeline">4.3. Family-wise pipeline</h2>
+<p>Family-wise pipeline is run by <strong>family_wise_IC.nf</strong>. The final results of the pipeline: dichotomised genes, optimal thresholds for each family, and IC calculations (both for the original distribution and for the shuffled chromosomes).
+Input parameters:</p>
+<ul>
+<li>--familyset -- path to the familyset (e.g. PANTHER)</li>
+<li>--dataset -- path to the <em>cleaned</em> TPM/UMI dataset file</li>
+<li>--type -- dichotomisation type (supported: <em>geomean05</em>, <em>fm05</em>, or <em>one</em>)</li>
+<li>--shuffle_N -- integer, number of shufflings performed for the permutation test</li>
+</ul>
+<p>Examples:</p>
+<pre><code><code><div>time ./family_wise_IC.nf --dataset `realpath Dopaminergic_TPM_clean.csv` --familyset `realpath clean_panther4march.csv` --type geomean05 --shuffle_N 1000 -resume;
+
+time ./family_wise_IC.nf --dataset `realpath klein.csv` --familyset `realpath clean_panther4march.csv` --type fm05 --shuffle_N 1000 -resume;
+
+</div></code></code></pre>
+<h3 id="431-transform-family-set-bintransform_familysetpy">4.3.1. Transform family set: <strong>bin/transform_familyset.py</strong></h3>
+<p>Input:</p>
+<ul>
+<li>familyset -- clean PANTHER familyset</li>
+<li>dataset -- clean TPM/UMI dataset</li>
+</ul>
+<p>Output:</p>
+<ul>
+<li>familyset.csv -- transformed familyset</li>
+</ul>
+<p>Description:
+Gets the overlap between the familyset and genes in a dataset, and filters out the families of size less than 5.</p>
+<h3 id="432-dichotomise-bindichotomise_familiespy">4.3.2. Dichotomise: <strong>bin/dichotomise_families.py</strong></h3>
+<p>Input:</p>
+<ul>
+<li>transformed familyset</li>
+<li>dataset</li>
+<li>type -- dichotomisation type (<em>geomean05</em>, <em>fm05</em> or <em>one</em>)</li>
+</ul>
+<p>Output:</p>
+<ul>
+<li>$dataset_name/$familyset_name/intermediate/dichotomised_genes.csv</li>
+<li>$dataset_name/$familyset_name/intermediate/family_thresholds.csv</li>
+</ul>
+<p>Description:
+Calculates family-wise thresholds and dichotomises genes accordingly.</p>
+<h3 id="433-calculate-ic-bincalculate_family_icpy">4.3.3. Calculate IC: <strong>bin/calculate_family_IC.py</strong></h3>
+<p>Input:</p>
+<ul>
+<li>transofmed familyset</li>
+<li>dataset</li>
+<li>type</li>
+</ul>
+<p>Output: $dataset_name/$familyset_name/results/family_IC.csv</p>
+<p>Description:
+Calculates IC for each family (from dichotomised genes). Reports family ID, family size, number of recorded genes, observed variance, PB variance, IC, and mean number of expressed genes per cell.</p>
+<h3 id="434-permute-families-binpermute_familiespy">4.3.4. Permute families: <strong>bin/permute_families.py</strong></h3>
+<p>Input:</p>
+<ul>
+<li>transformed familyset</li>
+<li>dataset</li>
+<li>n -- number of shufflings to perform</li>
+</ul>
+<p>Output: shuffled_families.csv (temporary)</p>
+<p>Description:
+The process run N times. Randomly shuffles assignment of genes to gene families.</p>
+<h3 id="435-calculate-shuffled-ic-bincalculate_family_icpy">4.3.5. Calculate shuffled IC: <strong>bin/calculate_family_IC.py</strong></h3>
+<p>Input:</p>
+<ul>
+<li>shuffled familyset</li>
+<li>dataset</li>
+<li>type -- dichotomisation type</li>
+</ul>
+<p>Output: family_IC.csv (temporary)</p>
+<p>Description:
+Performs the same calculation and reports the same output as the &quot;Calculate IC&quot; process, but on the shuffled familyset. The process is then run for each shuffled familyset (i.e. N times).</p>
+<h3 id="436-collect-shuffled-ic-bincollect_shuffled_icpy">4.3.6. Collect Shuffled IC: <strong>bin/collect_shuffled_IC.py</strong></h3>
+<p>Input:</p>
+<ul>
+<li>all shuffled_family_IC files</li>
+</ul>
+<p>Output: $dataset_name/$familyset_name/results/shuffled_family_IC.csv</p>
+<p>Description:
+Combines all shuffled familyset IC files together, adding the column to indicate iteration.</p>
+<h2 id="44-chromosome-wise-analysis">4.4. Chromosome-wise analysis</h2>
+<p>All of the below is to be run after the pipelines finished calculation, since most of the notebooks rely on the calculation results</p>
+<h3 id="441-statistical-tests-permutation_testipynb">4.4.1. Statistical tests: <strong>permutation_test.ipynb</strong></h3>
+<p>Input:</p>
+<ul>
+<li>dataset name</li>
+<li>dichotomisation type</li>
+</ul>
+<p>Description:
+Performs Kolmogorov-Smirnov test and permutation test (for each stretch size separately). Plots the results, and saves the results as CSV in $dataset/ directory</p>
+<h3 id="442-plot-statistical-tests-plot_chr_stat_testsipynb">4.4.2. Plot statistical tests: <strong>plot_chr_stat_tests.ipynb</strong></h3>
+<p>Input:</p>
+<ul>
+<li>results of statistical tests for all datasets</li>
+</ul>
+<p>Description:
+Combines information on statistical tests for all datasets and plots it (volcano and bar plots). The combined data is then saved in <em>chr_stats_test_summary.csv</em></p>
+<h3 id="443-plot-thresholdsdichotomisation-plot_thresholdsipynb">4.4.3. Plot thresholds/dichotomisation: <strong>plot_thresholds.ipynb</strong></h3>
+<p>Input:</p>
+<ul>
+<li>dichotomisation information</li>
+</ul>
+<p>Description:
+Plots histograms marking different thresholds</p>
+<h3 id="444-overlap-of-tails-of-chromosomal-stretches-chromosome_overlap_analysisipynb">4.4.4. Overlap of tails of chromosomal stretches: <strong>chromosome_overlap_analysis.ipynb</strong></h3>
+<p><strong>Depends on the results of dataset_overlaps.ipynb, run it first</strong>
+Input:</p>
+<ul>
+<li>overlap_chromosome_lower_raw.pickle -- from dataset_overlaps.ipynb</li>
+</ul>
+<p>Description:
+Produces table of overlaps (with verbose description) for chromosomal stretches -- <em>overlap_chromosome_lower_analysis.xlsx</em></p>
+<h2 id="45-family-wise-analysis">4.5. Family-wise analysis</h2>
+<h3 id="451-statistical-tests-family_wise_analysisipynb">4.5.1. Statistical tests: <strong>family_wise_analysis.ipynb</strong></h3>
+<p>Description:
+Performs Kolmogorov-Smirnov test and permutation test (for each family size separately, for family sizes that have at least 30 families). Plots the results, and saves the results as CSV in $dataset/ directory</p>
+<h3 id="452-overlap-of-tails-of-families-family_overlap_analysisipynb">4.5.2. Overlap of tails of families: <strong>family_overlap_analysis.ipynb</strong></h3>
+<p><strong>Depends on the results of dataset_overlaps.ipynb, run it first</strong>
+Input:</p>
+<ul>
+<li>overlap_family_lower_raw.csv -- from dataset_overlaps.ipynb</li>
+</ul>
+<p>Description:
+Produces table of overlaps (with verbose description) for chromosomal stretches -- <em>overlap_family_lower_analysis.xlsx</em></p>
+<h3 id="453-plot-statistical-tests-plot_family_stat_testsipynb">4.5.3. Plot statistical tests: <strong>plot_family_stat_tests.ipynb</strong></h3>
+<p>Input:</p>
+<ul>
+<li>results of statistical tests for all datasets</li>
+</ul>
+<p>Description:
+Combines information on statistical tests for all datasets and plots it (volcano and bar plots). The combined data is then saved in <em>family_stats_test_summary.csv</em></p>
+<h3 id="454-plot-chosen-families-plot_family_overlap_heatmapipynb">4.5.4. Plot chosen families: <strong>plot_family_overlap_heatmap.ipynb</strong></h3>
+<p>Plots heatmaps (on/off states) and histograms of number of expressed genes per cell for the chosen families.</p>
+<h2 id="46-both-chromosome--and-family-wise-analysis">4.6. Both chromosome- and family-wise analysis</h2>
+<p>Some notebooks perform analysis on both chromosome- and family-wise calculation results</p>
+<h3 id="461-cell-type-overlaps-dataset_overlapsipynb">4.6.1. Cell type overlaps: <strong>dataset_overlaps.ipynb</strong></h3>
+<p>Calculates lower and upper tail overlaps for both chromosome- and family-wise.</p>
+<p>Output:</p>
+<ul>
+<li>overlap_family_upper.xlsx and overlap_family_lower.xlsx</li>
+<li>overlap_family_lower_raw.csv</li>
+<li>overlap_chromosome_upper.xlsx and overlap_chromosome_lower.xlsx</li>
+<li>overlap_chromosome_lower_raw.pickle</li>
+</ul>
+<h2 id="47-misc">4.7. Misc</h2>
+<h3 id="471-transform-fitted-distributions-data-from-mathematica-fitted_distributionsipynb">4.7.1. Transform Fitted Distributions data (from Mathematica): <strong>fitted_distributions.ipynb</strong></h3>
+<p>Transoforms data obtained with Mathematica for further analysis: <em>$dataset/mathematica/fitted_distributions_thresholds.csv</em> and <em>$dataset/mathematica/fitted_distributions_dichotomised.csv</em></p>
+<h3 id="472-dichotomisation-correlation-dichotomisation_correlationipynb">4.7.2. Dichotomisation Correlation: <strong>dichotomisation_correlation.ipynb</strong></h3>
+<p>Input:</p>
+<ul>
+<li>Thresholds (for all dichotomisation methods and fitted distributions)</li>
+<li>Dichotomised datasets</li>
+</ul>
+<p>Description:
+Calculates correlation between dichotomisation methods, and plots pair-scatterplots and tables of correlation</p>
+<h3 id="473-thresholds-for-umi-no-bimodality-alveolar_exploratoryipynb">4.7.3. Thresholds for UMI (no bimodality): <strong>alveolar_exploratory.ipynb</strong></h3>
+<p>Plots histograms of marker genes for Alveolar cells, and calculates accuracy of different dichotomisation methods</p>
+<h3 id="474-distribution-fitting-mathematica_codedichotomisationnb">4.7.4. Distribution fitting: <strong>mathematica_code/Dichotomisation.nb</strong></h3>
+<p>Input:</p>
+<ul>
+<li>single-cell RNAseq dataset</li>
+</ul>
+<p>Description:
+Performs distribution fitting for individual genes, and searches for antimodes (if a distribution is bimodal)</p>
+<h3 id="475-permutation-test-mathematics_codepermutation_testnb">4.7.5. Permutation test: <strong>mathematics_code/permutation_test.nb</strong></h3>
+<p>Input:</p>
+<ul>
+<li>Table of dichotomised genes</li>
+</ul>
+<p>Description:
+Reimplementation of the shuffling and the permutation test in Mathematica (family-wise only). Does both steps (shuffling and test) and produces the p-values as an output.</p>
+<h2 id="48-utility-functions">4.8. Utility functions</h2>
+<h3 id="481-binpipeline_utilsgff_utilspy">4.8.1. bin/pipeline_utils/gff_utils.py</h3>
+<ul>
+<li>read_gff3(filename) -- reads GFF file into pandas Dataframe</li>
+<li>get_genes_from_gff3(gff3) -- extracts all genes from the dataframe</li>
+</ul>
+<h3 id="482-binpipeline_utilsic_utilspy">4.8.2. bin/pipeline_utils/ic_utils.py</h3>
+<ul>
+<li>get_observed_variance(genes) -- observed variance</li>
+<li>get_pb_variance(genes) -- PB/expected variance</li>
+<li>get_IC(obs_var, pb_var) -- get IC (yes, it just divides one by another, but I kept it for semantics)</li>
+<li>bootstrap_IC(genes, bootstrap_n = 10000) -- can be used for bootstrapping IC value for a set of genes</li>
+</ul>
+<h3 id="483-binpipeline_utilsnextflow_utilspy">4.8.3. bin/pipeline_utils/nextflow_utils.py</h3>
+<p>Couple functions that are used by nextflow pipeline specifically</p>
+<ul>
+<li>split_filenames(filenames) -- splits string of form <code>[filename1, filename2, ...]</code> into the list of filenames</li>
+<li>map_chromosome_filename(filename) -- get chromosome name/number from the filename (looks for pattern like <code>chr18</code>)</li>
+</ul>
+<h3 id="484-binpipeline_utilspomegranate_parserpy">4.8.4. bin/pipeline_utils/pomegranate_parser.py</h3>
+<p>Parses Mathematica probability distributions (as text strings) into pomegranate objects (so they can be operated from python)</p>
+<ul>
+<li>to_pomegranate(mathematica) -- converts as described</li>
+</ul>
+<h3 id="485-binpipeline_utilsvrs_utilspy">4.8.5. bin/pipeline_utils/vrs_utils.py</h3>
+<ul>
+<li>grange(a,b,step=1.2) -- Returns a list between a and b of geometrically progressing series</li>
+<li>get_vrs(gene, threshold) -- gives VRS for a given gene and threshold</li>
+<li>get_cvrs(gene, threshold) -- gives CVRS for a given gene and threshold</li>
+</ul>
+
+    </body>
+    </html>
