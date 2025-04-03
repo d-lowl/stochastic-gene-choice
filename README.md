@@ -67,7 +67,7 @@ Note: even though the pipeline scripts can be run manually, I highly suggest run
 
 The following documentation describes all the components in the roughly logical order (more or less in the order parts of the project are to be executed).
 
-For the details on the methods and the project itself see the article [pending]()
+For the details on the methods and the project itself see the article: [Gene Families With Stochastic Exclusive Gene Choice Underlie Cell Adhesion in Mammalian Cells](https://doi.org/10.3389/fcell.2021.642212)
 
 # 3. Important notes
 ## 3.1. Nextflow caching and storage capacity
